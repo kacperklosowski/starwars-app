@@ -1,9 +1,15 @@
-function App() {
-  return (
-    <>
-      <h1 className='text-3xl font-bold underline'>Hello app!</h1>
-    </>
-  )
-}
+import { Routes, Route } from "react-router-dom";
 
-export default App
+import Main from "./pages/Main";
+import NoMatch from "./pages/NoMatch";
+
+const App = () => {
+  return (
+    <Routes>
+      <Route index element={<Main />} />
+      <Route path="*" element={<NoMatch />} />
+    </Routes>
+  );
+};
+
+export default App;
