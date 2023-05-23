@@ -2,8 +2,8 @@ import MagnifyingGlassIcon from "./MagnifyingGlassIcon";
 
 const SearchBox = () => {
   return (
-    <form method="GET">
-      <div className="w-192 relative text-gray-600 focus-within:text-gray-400">
+    <form method="GET" className='w-50vw'>
+      <div className="relative text-gray-600 focus-within:text-gray-400">
         <span className="absolute inset-y-0 left-0 flex items-center pl-2">
           <button type="submit" className="p-1">
             <MagnifyingGlassIcon />

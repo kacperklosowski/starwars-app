@@ -8,6 +8,9 @@ export default {
     extend: {
       width: {
         '192': '48rem'
+      },
+      spacing: {
+        '50vw': '50vw'
       }
     },
   },
