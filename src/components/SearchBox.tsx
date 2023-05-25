@@ -1,8 +1,13 @@
 import { useSearchParams } from "react-router-dom";
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
+import axios from "axios";
 import MagnifyingGlassIcon from "./MagnifyingGlassIcon";
 
 const SEARCH_QUERY_PARAM = "search";
+
+const client = axios.create({
+  baseURL: "https://swapi.dev/api/people",
+});
 
 const SearchBox = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,17 +20,26 @@ const SearchBox = () => {
     const inputValue = event.target.value;
 
     setSearchParams((prev) => {
-      inputValue ? prev.set(SEARCH_QUERY_PARAM, inputValue) : prev.delete(SEARCH_QUERY_PARAM);
+      inputValue
+        ? prev.set(SEARCH_QUERY_PARAM, inputValue)
+        : prev.delete(SEARCH_QUERY_PARAM);
+
       return prev;
     });
   };
 
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const searchURL = searchValue
+      ? `?${SEARCH_QUERY_PARAM}=${searchValue}`
+      : "";
+
+    const response = await client.get(searchURL);
+  };
+
   return (
-    <form
-      method="GET"
-      className="w-50vw"
-      onSubmit={(event) => event.preventDefault()}
-    >
+    <form method="GET" className="w-50vw" onSubmit={handleSubmit}>
       <div className="relative text-gray-600 focus-within:text-gray-400">
         <span className="absolute inset-y-0 left-0 flex items-center pl-2">
           <button type="submit" className="p-1">
