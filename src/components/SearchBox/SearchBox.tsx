@@ -1,42 +1,26 @@
-import { useSearchParams } from "react-router-dom";
 import type { ChangeEvent, FormEvent } from "react";
-import axios from "axios";
 import SearchButton from "./SearchButton/SearchButton";
 import SearchInput from "./SearchInput/SearchInput";
-
-const SEARCH_QUERY_PARAM = "search";
-
-const client = axios.create({
-  baseURL: "https://swapi.dev/api/people",
-});
+import { useCharacters } from "../../hooks/useCharacters";
+import { useSearchParam } from "../../hooks/useSearchParam";
 
 const SearchBox = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { characters, fetchCharacters } = useCharacters();
+  const { searchValue, setSearchValue } = useSearchParam();
 
-  const searchValue = searchParams.get(SEARCH_QUERY_PARAM) || "";
+  console.log("🚀 ~ file: SearchBox.tsx:9 ~ SearchBox ~ characters:", characters)
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
     const inputValue = event.target.value;
 
-    setSearchParams((prev) => {
-      inputValue
-        ? prev.set(SEARCH_QUERY_PARAM, inputValue)
-        : prev.delete(SEARCH_QUERY_PARAM);
-
-      return prev;
-    });
+    setSearchValue(inputValue);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const searchURL = searchValue
-      ? `?${SEARCH_QUERY_PARAM}=${searchValue}`
-      : "";
-
-    const response = await client.get(searchURL);
+    fetchCharacters(searchValue);
   };
 
   return (
@@ -45,10 +29,7 @@ const SearchBox = () => {
         <span className="absolute inset-y-0 left-0 flex items-center pl-2">
           <SearchButton />
         </span>
-        <SearchInput
-          searchValue={searchValue}
-          onChange={handleOnChange}
-        />
+        <SearchInput searchValue={searchValue} onChange={handleOnChange} />
       </div>
     </form>
   );
